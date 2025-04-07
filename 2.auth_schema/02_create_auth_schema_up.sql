@@ -1,3 +1,5 @@
+BEGIN;  -- Start transaction
+
 -- Check if migration already exists
 DO $$ 
 BEGIN
@@ -50,3 +52,5 @@ SELECT migrations.track_migration(
     'sha256_hash_of_this_file', -- Placeholder It is going to be replaced with actual checksum when sh script run
     0
 ); 
+
+COMMIT;  -- End transaction

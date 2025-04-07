@@ -1,3 +1,5 @@
+BEGIN;  -- Start transaction
+
 -- Check if migration exists before running down migration
 DO $$ 
 BEGIN
@@ -26,3 +28,5 @@ DROP SCHEMA IF EXISTS "auth";
 
 -- Remove migration record
 DELETE FROM migrations.migration_history WHERE version = '2.1.0'; 
+
+COMMIT;  -- End transaction

@@ -12,6 +12,7 @@ This project provides a local PostgreSQL development environment with GitOps pra
   - `seeds/` - Seed data for auth schema
   - `run_migration.sh` - Script to run auth schema migrations
 - `connect.sh` - Utility script to connect to the database
+- `.gitignore` - Specifies which files Git should ignore
 
 ## Prerequisites
 
@@ -36,7 +37,7 @@ This project provides a local PostgreSQL development environment with GitOps pra
 3. Apply the auth schema migrations:
    ```bash
    cd 2.auth_schema
-   ./run_migration.sh up
+   ./run_migration.sh up|down|seed
    ```
 
 ## Connection Details
@@ -52,28 +53,6 @@ You can quickly connect to the database using the provided script:
 ```bash
 ./connect.sh
 ```
-
-## Seed Data
-
-The project includes seed data for testing and development. To run the seed data:
-
-1. Navigate to the auth schema directory:
-
-   ```bash
-   cd 2.auth_schema
-   ```
-
-2. Run the seed script:
-   ```bash
-   psql -h localhost -U postgres -d psql_local -f seeds/seed_auth_users.sql
-   ```
-
-This will create two test users:
-
-- Admin user (username: `admin`, password: `admin123`)
-- Regular user (username: `user`, password: `user123`)
-
-> **Note**: Make sure to run the migrations before running the seed data.
 
 ## Migration Management
 
@@ -92,3 +71,26 @@ All database changes are version controlled and follow a numbered step approach:
 2. Changes are applied in sequence
 3. All configuration is stored in Git
 4. Migration history is maintained in the database
+
+### Git Workflow
+
+1. Create feature branches for new database changes
+2. Include both up and down migration scripts
+3. Test migrations locally before committing
+4. Use meaningful commit messages describing database changes
+5. Review migration checksums before merging
+
+## Version Control and Git Practices
+
+### Git Configuration
+
+The project uses Git for version control with the following practices:
+
+1. **Database Changes**: All database changes (schemas, migrations, seeds) are version controlled
+2. **Sequential Changes**: Changes are applied in numbered sequence (e.g., `01_`, `02_`)
+3. **Migration Tracking**: Each migration is tracked both in Git and the database
+4. **Configuration as Code**: All configuration files are stored in Git
+
+### Recommended .gitignore Rules
+
+Add the following rules to your `.gitignore` file:

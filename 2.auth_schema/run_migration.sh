@@ -30,16 +30,28 @@ run_migration() {
     echo "Migration $direction completed: $file"
 }
 
+run_sql() {
+    local file=$1
+
+    # Run the migration
+    PGPASSWORD=$DB_PASSWORD psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME -f "$file"
+    
+    echo "Seed completed: $file"
+}
+
 # Main execution
 case "$1" in
     "up")
-        run_migration "up" "01_create_auth_schema_up.sql"
+        run_migration "up" "02_create_auth_schema_up.sql"
         ;;
     "down")
         run_migration "down" "02_create_auth_schema_down.sql"
         ;;
+    "seed")
+        run_sql "./seeds/seed_auth_users.sql"
+        ;;
     *)
-        echo "Usage: $0 {up|down}"
+        echo "Usage: $0 {up|down|seed}"
         exit 1
         ;;
 esac 
