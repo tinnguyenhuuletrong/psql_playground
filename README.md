@@ -11,6 +11,11 @@ This project provides a local PostgreSQL development environment with GitOps pra
   - `02_create_auth_schema_down.sql` - Rollback script for auth schema
   - `seeds/` - Seed data for auth schema
   - `run_migration.sh` - Script to run auth schema migrations
+- `3.user_todos/` - User todos schema and related migrations
+  - `03_create_user_todos_up.sql` - Creates the user_todos table in the public schema with appropriate columns and constraints
+  - `03_create_user_todos_down.sql` - Drops the table and its index for rollback
+  - `seeds/` - Seed data for user todos schema
+  - `run_migration.sh` - Script to run user todos schema migrations
 - `connect.sh` - Utility script to connect to the database
 - `.gitignore` - Specifies which files Git should ignore
 
@@ -35,8 +40,16 @@ This project provides a local PostgreSQL development environment with GitOps pra
    ```
 
 3. Apply the auth schema migrations:
+
    ```bash
    cd 2.auth_schema
+   ./run_migration.sh up|down|seed
+   ```
+
+4. Apply the user todos schema migrations:
+   ```bash
+   cd 3.user_todos
+   chmod +x run_migration.sh
    ./run_migration.sh up|down|seed
    ```
 
