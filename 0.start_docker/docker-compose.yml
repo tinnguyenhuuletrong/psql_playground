@@ -2,7 +2,9 @@ version: "3.8"
 
 services:
   postgres:
-    image: postgres:16-alpine
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: psql_local
     environment:
       POSTGRES_USER: postgres
@@ -17,6 +19,19 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+
+  rest:
+    container_name: pg_postgrest
+    image: postgrest/postgrest
+    restart: unless-stopped
+    ports:
+      - 3001:3000
+    environment:
+      PGRST_DB_URI: postgres://postgres:postgres@postgres:5432/psql_local
+      PGRST_DB_SCHEMA: public
+      PGRST_DB_ANON_ROLE: anon
+    depends_on:
+      - postgres
 
 volumes:
   postgres_data:
