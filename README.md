@@ -16,7 +16,11 @@ This project provides a local PostgreSQL development environment with GitOps pra
   - `03_create_user_todos_down.sql` - Drops the table and its index for rollback
   - `seeds/` - Seed data for user todos schema
   - `run_migration.sh` - Script to run user todos schema migrations
-- `connect.sh` - Utility script to connect to the database
+- `4.add_graphql/` - GraphQL extension and related migrations
+  - `04_enable_graphql_up.sql` - Enables the pg_graphql extension and sets up permissions
+  - `04_enable_graphql_down.sql` - Rollback script for GraphQL setup
+  - `run_migration.sh` - Script to run GraphQL migrations
+- `scripts/connect.sh` - Utility script to connect to the database
 - `.gitignore` - Specifies which files Git should ignore
 
 ## Prerequisites
@@ -64,7 +68,27 @@ This project provides a local PostgreSQL development environment with GitOps pra
 You can quickly connect to the database using the provided script:
 
 ```bash
-./connect.sh
+./scripts/connect.sh
+```
+
+## Development
+
+### Reset and Run Docker
+
+To reset the Docker environment and start fresh, use the following script:
+
+```bash
+cd scripts
+./0.reset_and_run_docker.sh
+```
+
+### Migrate Up All
+
+To run all migrations and seed the database, execute:
+
+```bash
+cd scripts
+./1.migrate_up_all.sh
 ```
 
 ## Migration Management
@@ -75,6 +99,8 @@ Migrations are tracked in the `migrations` schema using the `migration_history` 
 - Includes a checksum for verification
 - Tracks execution time and status
 - Stores any error messages if the migration fails
+
+The project now includes GraphQL functionality, allowing for flexible data querying and manipulation through the `pg_graphql` extension.
 
 ## GitOps Practices
 
