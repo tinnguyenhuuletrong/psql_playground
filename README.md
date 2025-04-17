@@ -5,79 +5,19 @@ This project provides a local PostgreSQL development environment with GitOps pra
 ## Project Structure
 
 - `0.start_docker/` - Docker configuration files
-  - `Dockerfile` - Dockerfile for the PostgreSQL container
 - `1.init_database/` - Initial database setup scripts
-  - `01_create_migrations_schema_up.sql` - Creates the migrations schema
-  - `01_create_migrations_schema_down.sql` - Rollback script for migrations schema
 - `2.auth_schema/` - Authentication schema and related migrations
-  - `02_create_auth_schema_up.sql` - Creates the authentication schema
-  - `02_create_auth_schema_down.sql` - Rollback script for auth schema
-  - `seeds/` - Seed data for auth schema
-  - `run_migration.sh` - Script to run auth schema migrations
 - `3.user_todos/` - User todos schema and related migrations
-  - `03_create_user_todos_up.sql` - Creates the user_todos table in the public schema with appropriate columns and constraints
-  - `03_create_user_todos_down.sql` - Drops the table and its index for rollback
-  - `seeds/` - Seed data for user todos schema
-  - `run_migration.sh` - Script to run user todos schema migrations
 - `4.add_graphql/` - GraphQL extension and related migrations
-  - `04_enable_graphql_up.sql` - Enables the pg_graphql extension and sets up permissions
-  - `04_enable_graphql_down.sql` - Rollback script for GraphQL setup
-  - `run_migration.sh` - Script to run GraphQL migrations
-- `4.add_graphql_elements/` - Additional GraphQL elements and related migrations
-  - `05_create_graphql_elements_up.sql` - Creates additional GraphQL elements
-  - `05_create_graphql_elements_down.sql` - Rollback script for additional GraphQL elements
-  - `seeds/` - Seed data for additional GraphQL elements
-  - `run_migration.sh` - Script to run additional GraphQL elements migrations
-- `scripts/connect.sh` - Utility script to connect to the database
+- `5.add_graphql_elements/` - Additional GraphQL elements and related migrations
+- `6.row_level_security/` - Additional PSQL Row Security Policies
+- `scripts` - Utility script to connect to the database
 - `.gitignore` - Specifies which files Git should ignore
 
 ## Prerequisites
 
 - Docker and Docker Compose
 - PostgreSQL client (psql)
-
-## Setup Instructions
-
-1. Start the PostgreSQL container:
-
-   ```bash
-   cd 0.start_docker
-   docker-compose up -d
-   ```
-
-2. Initialize the database:
-
-   ```bash
-   psql -h localhost -U postgres -d psql_local -f ../1.init_database/01_create_migrations_schema.sql
-   ```
-
-3. Apply the auth schema migrations:
-
-   ```bash
-   cd 2.auth_schema
-   ./run_migration.sh up|down|seed
-   ```
-
-4. Apply the user todos schema migrations:
-
-   ```bash
-   cd 3.user_todos
-   chmod +x run_migration.sh
-   ./run_migration.sh up|down|seed
-   ```
-
-5. Apply the GraphQL migrations:
-
-   ```bash
-   cd 4.add_graphql
-   ./run_migration.sh up|down
-   ```
-
-6. Apply the additional GraphQL elements migrations:
-   ```bash
-   cd 4.add_graphql_elements
-   ./run_migration.sh up|down
-   ```
 
 ## Connection Details
 
@@ -111,6 +51,20 @@ To run all migrations and seed the database, execute:
 ```bash
 cd scripts
 ./1.migrate_up_all.sh
+```
+
+### Connect and test RLS
+
+```bash
+./scripts/connect.sh
+```
+
+```sql
+-- set variable and swich role to anon
+SET request.jwt.claims.user_id TO '$UUID'; SET ROLE anon;
+
+
+-- You should only see owned user_todos records
 ```
 
 ## Migration Management
