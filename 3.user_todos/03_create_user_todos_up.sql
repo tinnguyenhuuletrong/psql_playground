@@ -15,7 +15,7 @@ END $$;
 -- Create user_todos table in public schema
 CREATE TABLE IF NOT EXISTS public.user_todos (
     id SERIAL PRIMARY KEY,
-    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+    user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
     title VARCHAR(255) NOT NULL,
     description TEXT,
     completed BOOLEAN DEFAULT FALSE,
@@ -29,15 +29,11 @@ CREATE INDEX idx_user_todos_user_id ON public.user_todos(user_id);
 -- Add comment to the table
 COMMENT ON TABLE public.user_todos IS 'Stores todo items for users';
 
--- Add comments to columns
-COMMENT ON COLUMN public.user_todos.id IS 'Primary key';
-COMMENT ON COLUMN public.user_todos.user_id IS 'Foreign key referencing auth.users';
-COMMENT ON COLUMN public.user_todos.title IS 'Title of the todo item';
-COMMENT ON COLUMN public.user_todos.description IS 'Detailed description of the todo item';
-COMMENT ON COLUMN public.user_todos.completed IS 'Status of the todo item';
-COMMENT ON COLUMN public.user_todos.created_at IS 'Timestamp when the todo was created';
-COMMENT ON COLUMN public.user_todos.updated_at IS 'Timestamp when the todo was last updated'; 
-
+-- Create trigger for updated_at
+CREATE TRIGGER update_user_todos_updated_at
+    BEFORE UPDATE ON "public".user_todos
+    FOR EACH ROW
+    EXECUTE FUNCTION "public".update_updated_at_column();
 
 -- Track this migration
 SELECT migrations.track_migration(

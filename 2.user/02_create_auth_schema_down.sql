@@ -12,19 +12,17 @@ BEGIN
 END $$;
 
 -- Drop trigger first
-DROP TRIGGER IF EXISTS update_users_updated_at ON "auth".users;
+DROP TRIGGER IF EXISTS update_users_updated_at ON "public".users;
 
 -- Drop trigger function
-DROP FUNCTION IF EXISTS "auth".update_updated_at_column();
+DROP FUNCTION IF EXISTS "public".update_updated_at_column();
 
 -- Drop table
-DROP TABLE IF EXISTS "auth".users;
+DROP TABLE IF EXISTS "public".users;
 
 -- Drop enum type
-DROP TYPE IF EXISTS "auth".user_role;
+DROP TYPE IF EXISTS "public".user_role;
 
--- Drop schema
-DROP SCHEMA IF EXISTS "auth";
 
 -- Remove migration record
 DELETE FROM migrations.migration_history WHERE version = '2.1.0'; 

@@ -11,27 +11,24 @@ BEGIN
     END IF;
 END $$;
 
--- Create user schema
-CREATE SCHEMA IF NOT EXISTS "auth";
-
 -- Create user role enum
-CREATE TYPE "auth".user_role AS ENUM ('user', 'admin');
+CREATE TYPE "public".user_role AS ENUM ('user', 'admin');
 
 -- Create user table
-CREATE TABLE "auth".users (
+CREATE TABLE "public".users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name VARCHAR(255) NOT NULL,
     password VARCHAR(64) NOT NULL, -- SHA256 hash is 64 characters
-    role "auth".user_role NOT NULL DEFAULT 'user',
+    role "public".user_role NOT NULL DEFAULT 'user',
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Create index on name for faster lookups
-CREATE INDEX idx_users_name ON "auth".users(name);
+CREATE INDEX idx_users_name ON "public".users(name);
 
 -- Create updated_at trigger function
-CREATE OR REPLACE FUNCTION "auth".update_updated_at_column()
+CREATE OR REPLACE FUNCTION "public".update_updated_at_column()
 RETURNS TRIGGER AS $$
 BEGIN
     NEW.updated_at = CURRENT_TIMESTAMP;
@@ -41,9 +38,9 @@ $$ language 'plpgsql';
 
 -- Create trigger for updated_at
 CREATE TRIGGER update_users_updated_at
-    BEFORE UPDATE ON "auth".users
+    BEFORE UPDATE ON "public".users
     FOR EACH ROW
-    EXECUTE FUNCTION "auth".update_updated_at_column();
+    EXECUTE FUNCTION "public".update_updated_at_column();
 
 -- Track this migration
 SELECT migrations.track_migration(

@@ -5,8 +5,8 @@ pushd ../1.init_database || exit
 sh ./run_migration.sh up
 popd  # Return to the previous directory
 
-# Step 2: Navigate to 2.auth_schema and run migrations and seeding
-pushd ../2.auth_schema || exit
+# Step 2: Navigate to 2.user and run migrations and seeding
+pushd ../2.user || exit
 sh ./run_migration.sh up && sh ./run_migration.sh seed
 popd  # Return to the previous directory
 

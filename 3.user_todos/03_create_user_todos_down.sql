@@ -11,6 +11,9 @@ BEGIN
     END IF;
 END $$;
 
+-- Drop trigger first
+DROP TRIGGER IF EXISTS update_user_todos_updated_at ON "public".user_todos;
+
 -- Drop the user_todos table and its index
 DROP INDEX IF EXISTS public.idx_user_todos_user_id;
 DROP TABLE IF EXISTS public.user_todos; 

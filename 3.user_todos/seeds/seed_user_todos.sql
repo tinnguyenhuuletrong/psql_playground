@@ -5,11 +5,10 @@ DO $$
 DECLARE
     user_id_1 UUID;
     user_id_2 UUID;
-    user_id_3 UUID;
 BEGIN
     -- Query user IDs based on name
-    SELECT id INTO user_id_1 FROM auth.users WHERE name = 'user'; -- Replace 'user' with the actual name
-    SELECT id INTO user_id_2 FROM auth.users WHERE name = 'admin'; -- Replace 'admin' with the actual name
+    SELECT id INTO user_id_1 FROM public.users WHERE name = 'user'; -- Replace 'user' with the actual name
+    SELECT id INTO user_id_2 FROM public.users WHERE name = 'admin'; -- Replace 'admin' with the actual name
 
     -- Insert todo items using the queried user IDs
     INSERT INTO public.user_todos (user_id, title, description, completed)

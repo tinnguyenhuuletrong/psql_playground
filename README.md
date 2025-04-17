@@ -5,9 +5,12 @@ This project provides a local PostgreSQL development environment with GitOps pra
 ## Project Structure
 
 - `0.start_docker/` - Docker configuration files
+  - `Dockerfile` - Dockerfile for the PostgreSQL container
 - `1.init_database/` - Initial database setup scripts
+  - `01_create_migrations_schema_up.sql` - Creates the migrations schema
+  - `01_create_migrations_schema_down.sql` - Rollback script for migrations schema
 - `2.auth_schema/` - Authentication schema and related migrations
-  - `01_create_auth_schema_up.sql` - Creates the authentication schema
+  - `02_create_auth_schema_up.sql` - Creates the authentication schema
   - `02_create_auth_schema_down.sql` - Rollback script for auth schema
   - `seeds/` - Seed data for auth schema
   - `run_migration.sh` - Script to run auth schema migrations
@@ -20,6 +23,11 @@ This project provides a local PostgreSQL development environment with GitOps pra
   - `04_enable_graphql_up.sql` - Enables the pg_graphql extension and sets up permissions
   - `04_enable_graphql_down.sql` - Rollback script for GraphQL setup
   - `run_migration.sh` - Script to run GraphQL migrations
+- `4.add_graphql_elements/` - Additional GraphQL elements and related migrations
+  - `05_create_graphql_elements_up.sql` - Creates additional GraphQL elements
+  - `05_create_graphql_elements_down.sql` - Rollback script for additional GraphQL elements
+  - `seeds/` - Seed data for additional GraphQL elements
+  - `run_migration.sh` - Script to run additional GraphQL elements migrations
 - `scripts/connect.sh` - Utility script to connect to the database
 - `.gitignore` - Specifies which files Git should ignore
 
@@ -51,10 +59,24 @@ This project provides a local PostgreSQL development environment with GitOps pra
    ```
 
 4. Apply the user todos schema migrations:
+
    ```bash
    cd 3.user_todos
    chmod +x run_migration.sh
    ./run_migration.sh up|down|seed
+   ```
+
+5. Apply the GraphQL migrations:
+
+   ```bash
+   cd 4.add_graphql
+   ./run_migration.sh up|down
+   ```
+
+6. Apply the additional GraphQL elements migrations:
+   ```bash
+   cd 4.add_graphql_elements
+   ./run_migration.sh up|down
    ```
 
 ## Connection Details
@@ -120,8 +142,6 @@ All database changes are version controlled and follow a numbered step approach:
 5. Review migration checksums before merging
 
 ## Version Control and Git Practices
-
-### Git Configuration
 
 The project uses Git for version control with the following practices:
 
