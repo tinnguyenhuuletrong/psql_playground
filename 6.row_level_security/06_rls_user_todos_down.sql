@@ -11,6 +11,9 @@ BEGIN
     END IF;
 END $$;
 
+-- Drop  Function to retrieve the current user's UUID from the JWT claims
+DROP FUNCTION "session_user_uuid"();
+
 -- Drop row level security policies
 DROP POLICY IF EXISTS user_todos_user_policy ON public.user_todos;
 DROP POLICY IF EXISTS user_todos_admin_policy ON public.user_todos;

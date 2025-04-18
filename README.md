@@ -53,19 +53,50 @@ cd scripts
 ./1.migrate_up_all.sh
 ```
 
-### Connect and test RLS
+### Connecting and Testing Row-Level Security (RLS)
+
+To test Row-Level Security (RLS), follow these steps:
+
+**Using psql CLI**
+
+First, connect to the database using the provided script:
 
 ```bash
 ./scripts/connect.sh
 ```
 
+Once connected, execute the following SQL commands to simulate an anonymous user session:
+
 ```sql
--- set variable and swich role to anon
-SET request.jwt.claims.user_id TO '$UUID'; SET ROLE anon;
-
-
--- You should only see owned user_todos records
+-- Set the JWT claims for user_id and switch to the anon role
+SET request.jwt.claims TO '{ "user_id": "<UUID>" }'; SET ROLE anon;
 ```
+
+After setting the role, you should only see user_todos records owned by the user with the specified UUID.
+
+**Using graphiql.index.html**
+
+To test RLS using the GraphiQL interface, you need to set a request header with a valid JWT token. The JWT token should contain the user_id as its payload.
+
+Here's an example of how the JWT payload should look:
+
+```json
+{
+  "user_id": "<UUID>"
+}
+```
+
+You can generate a JWT token using tools like [jwt.io](https://jwt.io/). The JWT secret key can be found in the `PGRST_JWT_SECRET` environment variable in the `docker_compose.yml` file.
+
+Once you have the JWT token, set it in the request header as follows:
+
+```json
+{
+  "Authorization": "Bearer <JWT token>"
+}
+```
+
+This will allow you to test RLS using the GraphiQL interface with the specified user_id.
 
 ## Migration Management
 

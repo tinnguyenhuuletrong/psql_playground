@@ -19,6 +19,14 @@ popd  # Return to the previous directory
 pushd ../4.add_graphql || exit
 sh ./run_migration.sh up
 
+# Step 5: Navigate to 5.add_graphql_elements and run migrations
+pushd ../5.add_graphql_elements || exit
+sh ./run_migration.sh up
+
+# Step 6: Navigate to 6.row_level_security and run migrations
+pushd ../6.row_level_security || exit
+sh ./run_migration.sh up
+
 # restart pg_postgrest - affect the schema permission
 docker restart pg_postgrest
 

@@ -1,3 +1,7 @@
+# ----- WARINING -----
+# The secret credentials provided below are intended for development purposes only.
+# For real production environments, please utilize a secret management system.
+
 version: "3.8"
 
 services:
@@ -30,6 +34,7 @@ services:
       PGRST_DB_URI: postgres://postgres:postgres@postgres:5432/psql_local
       PGRST_DB_SCHEMAS: public
       PGRST_DB_ANON_ROLE: anon
+      PGRST_JWT_SECRET: aefb19a0c33f0aaace954f7e53ecbe34c5adb28198daf054d5b162d7fcf10db5
     depends_on:
       - postgres
 
